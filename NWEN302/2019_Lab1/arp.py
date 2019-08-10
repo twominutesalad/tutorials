@@ -43,7 +43,7 @@ def main(net):
 			print ("Received {} on {}".format(packet, input_port))
 			print("\n")
 			if packet[Arp].targetprotoaddr == host_ip:
-				arp_reply(packet[Arp].targetprotoaddr, packet[Arp].targethwaddr)
+				arp_reply(packet[Arp].senderprotoaddr, packet[Arp].senderhwaddr)
 			#break
 		#elif 
 		else:
