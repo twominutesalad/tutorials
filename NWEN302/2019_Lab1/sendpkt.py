@@ -1,24 +1,10 @@
 from switchyard.lib.userlib import *
 
 def main(net):
-#     eth = Ethernet(dst='ff:ff:ff:ff:ff:ff')
-#     ip = IPv4(dst='192.168.1.1', ttl=16, protocol=IPProtocol.ICMP)
-#     icmp = ICMP(icmptype=ICMPType.EchoRequest)
-#     icmp.icmpdata.sequence = 1
-#     icmp.icmpdata.identifier = 13
-
-#     #eth.src = 'ff:ff:ff:ff:ff:ff'
-
-#     pkt = Packet()
-
-#     pkt += eth
-#     pkt += ip
-#     pkt += icmp
-
     # Sends out an ARP request to my Vodafone provided router
     
     interface = net.interface_by_name("wlp3s0")
-    targetip = '192.168.1.1'
+    target_ip = '192.168.1.1'
 
     ether = Ethernet()
     ether.src = interface.ethaddr
@@ -28,7 +14,7 @@ def main(net):
               senderhwaddr=interface.ethaddr,
               senderprotoaddr=interface.ipaddr,
               targethwaddr='ff:ff:ff:ff:ff:ff',
-              targetprotoaddr=targetip)
+              targetprotoaddr=target_ip)
     arppacket = ether + arp
 
     print(arppacket)
@@ -36,31 +22,7 @@ def main(net):
     print("Sending...")
     net.send_packet(interface, arppacket)
 
-    # Then handle an ARP response
+    # Then handle an ARP response with arp.py
 
-
-
-
-
-
-#     print("Packet format: " + str(pkt))
-
-
-#     for intf in net.interfaces():
-#         eth.src = intf.ethaddr
-#         ip.src = intf.ipaddr
-#         print("Sending {} out {}".format(pkt, intf.name))
-#         try:
-#             net.send_packet(intf.name, pkt)
-#             print("Sending...")
-#             print(pkt)
-#         except Exception as e:
-#             log_failure("Can't send packet: {}".format(str(e)))
     net.shutdown()
 
-
-
-# def main(net):
-#     for intf in net.interfaces():
-#         log_info("{} has ethaddr {} and ipaddr {}/{} and is of type {}".format(
-#             intf.name, intf.ethaddr, intf.ipaddr, intf.netmask, intf.iftype.name))
