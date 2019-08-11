@@ -10,17 +10,23 @@ def main(net):
     # .. to a large range of addresses in advance. In an actual deployment..
     # .. this might create a lot of overhead traffic.  
     interface = net.interface_by_name("wlp3s0")
-    target_ip = '192.168.1.1'
+    target_ip = '192.168.1.14'
 
-    # Create a new Ethernet object
+    # Create a new Ethernet object. This would be done in link_layer.py for lab1
     ether = Ethernet()
 
     # Set the Ethernet source address to the source address of this hosts Ethernet adapter
     ether.src = interface.ethaddr
+
+    # Set the L2 destination to broadcast
     ether.dst = 'ff:ff:ff:ff:ff:ff'
+
+    # Set the EthernetType to ARP
     ether.ethertype = EtherType.ARP
+
+    # Finally, create the ARP request.
     arp = Arp(operation=ArpOperation.Request,
-              senderhwaddr=interface.ethaddr,
+              senderhwaddr=interface.ethaddr, # This would be done in link_layer.py for lab1
               senderprotoaddr=interface.ipaddr,
               targethwaddr='ff:ff:ff:ff:ff:ff',
               targetprotoaddr=target_ip)
@@ -29,9 +35,12 @@ def main(net):
     print(arppacket)
 
     print("Sending...")
+
+    # Finally, send the packet out the physical interface. 
     net.send_packet(interface, arppacket)
 
-    # Then handle an ARP response with arp.py
+    # Then handle the ARP reply with arp.py
 
+    # Gracefully close the net object. 
     net.shutdown()
 
